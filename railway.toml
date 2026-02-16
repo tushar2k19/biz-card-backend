@@ -1,0 +1,11 @@
+# Railway config for Business Card backend (NestJS + Prisma)
+# Used when deploying via Railway MCP / CLI or from biz-card-backend repo
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && npx prisma generate && npm run build"
+
+[deploy]
+startCommand = "npx prisma migrate deploy && node dist/src/main.js"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10

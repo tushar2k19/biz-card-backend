@@ -1,0 +1,24 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateOrganizationDto } from './dto/create-organization.dto';
+
+@Injectable()
+export class OrganizationsService {
+    constructor(private prisma: PrismaService) { }
+
+    create(createOrganizationDto: CreateOrganizationDto) {
+        return this.prisma.organization.create({
+            data: createOrganizationDto,
+        });
+    }
+
+    findAll() {
+        return this.prisma.organization.findMany();
+    }
+
+    findOne(id: string) {
+        return this.prisma.organization.findUnique({
+            where: { id },
+        });
+    }
+}

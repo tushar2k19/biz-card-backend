@@ -23,7 +23,9 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Backend for the **Business Card Scanner** app: NestJS + Prisma (PostgreSQL), JWT auth, organizations, users, and business cards API.
+
+**Deploy on Railway:** see [RAILWAY.md](./RAILWAY.md) for step-by-step instructions.
 
 ## Project setup
 

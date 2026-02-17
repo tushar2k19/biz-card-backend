@@ -13,10 +13,11 @@ export class BusinessCardsService {
 
     async scan(file: Express.Multer.File) {
         const buffer = fs.readFileSync(file.path);
-        const data = await this.ocrService.processImage(buffer, file.mimetype);
+        const { data, ocrSource } = await this.ocrService.processImage(buffer, file.mimetype);
         return {
             extractedData: data,
             imageUrl: `/uploads/${file.filename}`,
+            ocrSource, // 'claude' | 'tesseract' – so you can confirm which ran (e.g. in Network tab or logs)
         };
     }
 

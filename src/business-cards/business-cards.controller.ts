@@ -4,7 +4,8 @@ import { CreateBusinessCardDto } from './dto/create-business-card.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import * as fs from 'fs';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
 
@@ -23,7 +24,11 @@ export class BusinessCardsController {
     @Post('scan')
     @UseInterceptors(FileInterceptor('file', {
         storage: diskStorage({
-            destination: './uploads',
+            destination: (req, file, cb) => {
+                const dir = join(process.cwd(), 'uploads');
+                if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+                cb(null, dir);
+            },
             filename: (req, file, cb) => {
                 const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
                 return cb(null, `${randomName}${extname(file.originalname)}`);

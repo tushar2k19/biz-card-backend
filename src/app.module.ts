@@ -10,10 +10,13 @@ import { OcrModule } from './ocr/ocr.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
+// Use cwd/uploads so it matches Multer destination (files are served from where they're saved).
+const uploadsDir = join(process.cwd(), 'uploads');
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: uploadsDir,
       serveRoot: '/uploads',
     }),
     PrismaModule,

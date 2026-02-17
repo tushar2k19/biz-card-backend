@@ -24,16 +24,17 @@ Return ONLY the JSON object, no other text.`;
 export class OcrService {
     private readonly logger = new Logger(OcrService.name);
 
-    async processImage(imageBuffer: Buffer, mimeType: string) {
+    async processImage(imageBuffer: Buffer, mimeType: string): Promise<{ data: Record<string, unknown>; ocrSource: 'claude' | 'tesseract' }> {
         const imageBase64 = imageBuffer.toString('base64');
         const anthropicResult = await this.tryAnthropic(imageBase64, mimeType);
 
         if (anthropicResult.success) {
-            return anthropicResult.data;
+            return { data: anthropicResult.data, ocrSource: 'claude' };
         }
 
         this.logger.warn(`Falling back to local OCR: ${anthropicResult.reason}`);
-        return this.runLocalFallback(imageBuffer);
+        const fallbackData = await this.runLocalFallback(imageBuffer);
+        return { data: fallbackData, ocrSource: 'tesseract' };
     }
 
     private async tryAnthropic(imageBase64: string, mimeType: string) {

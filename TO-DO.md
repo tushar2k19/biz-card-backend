@@ -45,6 +45,17 @@
 - [ ] Verify deployment succeeds and migrations run
 - [ ] Update frontend to use backend URL if needed
 
+### ISP blocks Railway domains (2025-02-17)
+
+**Fix applied:** API requests now go through Netlify proxy instead of directly to Railway.
+
+- **Frontend (`src/api/client.js`):** In production, `baseURL` defaults to `/api` so requests hit the frontend origin (Netlify), which proxies to Railway.
+- **Netlify (`netlify.toml`):** Redirect `/api/*` to `https://backend-production-e79a.up.railway.app/:splat`.
+
+User's browser → Netlify (not blocked) → Railway backend. No system config changes needed.
+
+**If backend URL changes:** Update the `to` URL in `netlify.toml`.
+
 ---
 
 ## Deployment issues & fixes (2025-02-17)
